@@ -1,26 +1,29 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import CommerceShell from '@/Layouts/CommerceShell';
 
 export default function Dashboard() {
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Dashboard
-                </h2>
-            }
+        <CommerceShell
+            eyebrow="Customer workspace"
+            title="Your commerce cockpit"
+            subtitle="هذه صفحة مشتري عامة بعد تسجيل الدخول. لاحقا ستربطها بالطلبات، العناوين، وسلة الشراء المحفوظة."
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            You're logged in!
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
+            <section className="grid gap-5 lg:grid-cols-3">
+                {['Recent orders', 'Saved carts', 'Payment status'].map((title) => (
+                    <article key={title} className="fintech-panel rounded-xl p-6">
+                        <h2 className="text-lg font-black text-slate-950 dark:text-white">{title}</h2>
+                        <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                            TODO: اربط هذا القسم ببيانات المستخدم الحالي فقط بعد بناء العلاقات والـ policies.
+                        </p>
+                    </article>
+                ))}
+            </section>
+
+            <Link href="/market" className="fintech-button mt-6">
+                Continue shopping
+            </Link>
+        </CommerceShell>
     );
 }
