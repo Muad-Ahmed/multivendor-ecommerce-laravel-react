@@ -29,10 +29,6 @@ return new class extends Migration {
             $table->timestamp('paid_at')->nullable();
             $table->json('raw_payload')->nullable();
             $table->timestamps();
-
-
-
-
         });
     }
 

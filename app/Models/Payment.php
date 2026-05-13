@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
@@ -10,4 +11,20 @@ class Payment extends Model
     // TODO: أضف علاقة belongsTo مع Order لأن الدفع يتبع طلبا واحدا في هذا المشروع التدريبي.
     // TODO: اجعل تحديث حالة الدفع يتم من Stripe webhook لاحقا، وليس من زر الواجهة فقط.
     // TODO: لا تخزن بيانات البطاقة أبدا؛ Stripe يتولى ذلك.
+
+
+    protected $fillable = [];
+    
+    protected $casts = [
+        'paid_at' => 'datetime',
+        'raw_payload' => 'array',
+    ];
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
+    }
+
 }
+
+
