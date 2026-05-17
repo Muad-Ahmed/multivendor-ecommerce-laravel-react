@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 
 class Product extends Model
 {
@@ -48,5 +49,21 @@ class Product extends Model
         return $query->where('status', 'pending');
     }
 
+    public function scopeVendor(Builder $query, ?int $vendorId): Builder
+    {
+        return $query->when(
+            $vendorId,
+            fn($query) =>
+            $query->where('vendor_id', $vendorId)
+        );
+    }
 
+    public function scopeCategory(Builder $query, ?int $categoryId): Builder
+    {
+        return $query->when(
+            $categoryId,
+            fn($query) =>
+            $query->where('category_id', $categoryId)
+        );
+    }
 }
