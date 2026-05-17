@@ -1,4 +1,9 @@
 import { Link } from '@inertiajs/react';
+// TODO: استورد مكون السلة الجانبية CartDrawer هنا.
+// مثال: import CartDrawer from '@/Components/CartDrawer';
+
+// TODO: استورد مخزن الحالة useCommerceStore هنا.
+// مثال: import { useCommerceStore } from '@/Stores/useCommerceStore';
 
 const navigation = [
     { label: 'Market', href: '/market' },
@@ -8,8 +13,24 @@ const navigation = [
 ];
 
 export default function CommerceShell({ children, eyebrow = 'Multi-vendor commerce', title, subtitle }) {
+    // =========================================================================
+    // TODO: جلب دوال وحالات السلة من Zustand هنا للتحكم بظهور السلة وعدد العناصر:
+    // 1. toggleCart (دالة فتح/إغلاق السلة)
+    // 2. cart (مصفوفة عناصر السلة لمعرفة العدد الكلي للمشتريات)
+    // =========================================================================
+    
+    // قيم مؤقتة (Mock Data) لمنع أخطاء التشغيل؛ استبدلها لاحقاً بقيم Zustand:
+    const toggleCart = () => {};
+    const cart = [];
+
+    // حساب إجمالي عدد العناصر في السلة (مجموع كميات كل منتج):
+    const totalItems = cart.reduce((total, item) => total + (item.quantity || 0), 0);
+
     return (
         <div className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(6,182,212,0.18),transparent_32%),linear-gradient(135deg,#f8fafc_0%,#eef2ff_45%,#ecfeff_100%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(6,182,212,0.22),transparent_34%),linear-gradient(135deg,#020617_0%,#111827_48%,#082f49_100%)]">
+            
+            {/* TODO: أضف مكون <CartDrawer /> هنا ليعمل في الخلفية على مستوى الموقع بالكامل */}
+            
             <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
                 <Link href="/" className="flex items-center gap-3">
                     <span className="grid h-10 w-10 place-items-center rounded-lg bg-slate-950 text-sm font-black text-cyan-300 shadow-glow dark:bg-white dark:text-slate-950">
@@ -32,17 +53,33 @@ export default function CommerceShell({ children, eyebrow = 'Multi-vendor commer
                     ))}
                 </nav>
 
-                <button
-                    type="button"
-                    className="fintech-button-secondary"
-                    onClick={() => {
-                        // TODO: انقل منطق تبديل الثيم إلى useCommerceStore حتى لا يصبح الزر مسؤولا عن إدارة الحالة مباشرة.
-                        // TODO: حدّث localStorage بقيمة theme الجديدة حتى يتذكر التطبيق اختيار المستخدم بعد إعادة التحميل.
-                        document.documentElement.classList.toggle('dark');
-                    }}
-                >
-                    Theme
-                </button>
+                <div className="flex items-center gap-3">
+                    {/* زر السلة (Cart Trigger) بتصميم Fintech مميز ومؤثرات حركية */}
+                    <button
+                        type="button"
+                        className="relative flex items-center justify-center rounded-lg border border-slate-200 bg-white/70 p-2.5 text-slate-600 transition hover:bg-white hover:text-slate-950 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                        onClick={toggleCart} // فتح السلة عند الضغط
+                    >
+                        <span className="text-lg">🛒</span>
+                        {totalItems > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-[10px] font-black text-white shadow-glow">
+                                {totalItems}
+                            </span>
+                        )}
+                    </button>
+
+                    <button
+                        type="button"
+                        className="fintech-button-secondary"
+                        onClick={() => {
+                            // TODO: انقل منطق تبديل الثيم إلى useCommerceStore حتى لا يصبح الزر مسؤولا عن إدارة الحالة مباشرة.
+                            // TODO: حدّث localStorage بقيمة theme الجديدة حتى يتذكر التطبيق اختيار المستخدم بعد إعادة التحميل.
+                            document.documentElement.classList.toggle('dark');
+                        }}
+                    >
+                        Theme
+                    </button>
+                </div>
             </header>
 
             <main className="mx-auto w-full max-w-7xl px-5 pb-12 sm:px-8">

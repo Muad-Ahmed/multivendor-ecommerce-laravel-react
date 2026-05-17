@@ -8,6 +8,10 @@ const products = [
 ];
 
 export default function Catalog() {
+    // =========================================================================
+    // TODO: جلب دالة addToCart ودالة toggleCart من Zustand هنا.
+    // =========================================================================
+
     return (
         <CommerceShell
             eyebrow="Shared storefront"
@@ -38,6 +42,11 @@ export default function Catalog() {
                                 <h2 className="mt-3 text-xl font-black text-slate-950 dark:text-white">{product.name}</h2>
                                 <div className="mt-5 flex items-center justify-between">
                                     <span className="text-lg font-black text-slate-950 dark:text-white">{product.price}</span>
+                                    
+                                    {/* TODO: استبدل رابط Link أدناه بزر اعتيادي (button) يقوم بالتالي عند الضغط عليه:
+                                        1. استدعاء addToCart(product) لإضافة العنصر للسلة.
+                                        2. فتح السلة الجانبية تلقائياً (عن طريق استدعاء toggleCart أو تعيينها لتصبح true).
+                                    */}
                                     <Link href="/checkout" className="fintech-button">
                                         Buy
                                     </Link>

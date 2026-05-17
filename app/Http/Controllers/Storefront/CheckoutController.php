@@ -14,6 +14,13 @@ class CheckoutController extends Controller
         // TODO: احسب الإجمالي في السيرفر من الأسعار المخزنة في قاعدة البيانات، لأن الواجهة قابلة للتلاعب.
         // TODO: جهز لاحقا Stripe PaymentIntent في Action منفصل، ولا تضع منطق Stripe مباشرة داخل الكنترولر.
         // TODO: مرر client_secret إلى الواجهة فقط بعد التحقق من السلة والمستخدم والعملة.
+
+        $user = auth()->user();
+
+        // TODO: قم باستقبال عناصر السلة المرفوعة (IDs & Quantities) من الـ request.
+        // TODO: جلب المنتجات الفعلية من قاعدة البيانات للتحقق من صحتها وأسعارها وتوفرها في المخزون.
+        // TODO: مرر الإجمالي الحقيقي المحسوب في السيرفر وتفاصيل المنتجات كـ props إلى صفحة الدفع.
+
         return Inertia::render('Storefront/Checkout');
     }
 }
