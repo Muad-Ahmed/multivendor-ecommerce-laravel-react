@@ -35,6 +35,11 @@ class Product extends Model
         return $this->belongsTo(VendorProfile::class, 'vendor_profile_id');
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function productImages(): HasMany
     {
         return $this->hasMany(ProductImage::class);

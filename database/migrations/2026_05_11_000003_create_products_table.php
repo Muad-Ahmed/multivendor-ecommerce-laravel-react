@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('slug');
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->unique(['vendor_profile_id', 'slug']);
             $table->integer('price_amount');
             $table->string('price_currency', 3)->default('USD');
