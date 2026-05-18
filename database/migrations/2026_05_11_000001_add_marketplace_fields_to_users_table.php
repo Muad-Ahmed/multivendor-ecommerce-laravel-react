@@ -11,7 +11,7 @@ return new class extends Migration {
         // TODO: أضف index على role لأنك ستفلتر المستخدمين حسب الدور كثيرا في لوحة المشرف.
         // TODO: أضف حقل phone اختياري إذا احتجت بيانات تواصل للشحن أو دعم البائع.
 
-        Schema::create('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->enum('role', ['customer', 'vendor', 'admin'])->default('customer')->index();
             $table->string('phone')->nullable()->after('email');
         });
