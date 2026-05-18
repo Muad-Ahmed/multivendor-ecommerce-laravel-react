@@ -30,15 +30,37 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'phone' => fake()->phoneNumber(),
         ];
     }
 
+    // custom states : 
+    public function customer(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'customer',
+        ]);
+    }
+
+    public function vendor(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'vendor',
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn() => [
+            'role' => 'admin',
+        ]);
+    }
     /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
