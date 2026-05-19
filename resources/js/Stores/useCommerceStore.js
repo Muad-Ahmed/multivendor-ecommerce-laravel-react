@@ -4,42 +4,69 @@ import { persist } from 'zustand/middleware';
 export const useCommerceStore = create(
     persist(
         (set, get) => ({
-            // ==========================================
-            // 1. STATE FIELDS (حقول الحالة)
-            // ==========================================
-            
-            // TODO: عرّف مصفوفة السلة الابتدائية باسم 'cart' وتكون فارغة افتراضياً [].
-            // السلة ستحتوي على عناصر بالهيكل التالي: { id, name, vendor, price_amount, price_currency, quantity, accent }
-            
-            // TODO: عرّف حالة منطقية (boolean) باسم 'isCartOpen' وتكون false افتراضياً للتحكم بظهور السلة الجانبية.
-            
-            // TODO: عرّف حالة السلسلة النصية للثيم باسم 'theme' وتكون 'light' افتراضياً.
 
-            // ==========================================
-            // 2. ACTIONS (الإجراءات والعمليات)
-            // ==========================================
 
-            // TODO: اكتب دالة 'toggleCart' لتبديل حالة فتح وإغلاق السلة (فتح إذا كانت مغلقة والعكس).
-            
-            // TODO: اكتب دالة 'addToCart(product)' لإضافة منتج إلى السلة.
-            // تلميح: تحقق أولاً إذا كان المنتج موجوداً مسبقاً (باستخدام المعرف id):
-            // - إذا كان موجوداً: قم بزيادة الكمية (quantity) بمقدار 1.
-            // - إذا لم يكن موجوداً: أضف المنتج إلى المصفوفة مع تعيين الكمية الابتدائية لتكون 1.
+            // cart items structure: { id, name, vendor, price_amount, price_currency, quantity, accent }
+            cart: [],
+            isCartOpen: false,
+            // theme
+            theme: 'light',
 
-            // TODO: اكتب دالة 'removeFromCart(productId)' لإزالة منتج تماماً من السلة باستخدام معرفه.
 
-            // TODO: اكتب دالة 'updateQuantity(productId, newQuantity)' لتحديث كمية منتج معين في السلة.
-            // تلميح: تأكد أن الكمية الجديدة لا تقل عن 1.
+            // Theme actions: 
+            toggleTheme: () => set((state) => ({
+                theme: state.theme === 'light' ? 'dark' : 'light'
+            })),
 
-            // TODO: اكتب دالة 'clearCart()' لإفراغ السلة تماماً وتعيينها إلى [] (تُستدعى بعد نجاح الدفع).
 
-            // TODO: اكتب دالة 'toggleTheme()' لتبديل الثيم بين 'light' و 'dark' وتحديث فئة الـ HTML.
+            // Cart actions: 
+            // toggle
+            toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
+
+            // add
+            addToCart: (product) => set((state) => {
+                const isExist = state.cart.some((p) => p.id === product.id)
+
+                if (isExist) {
+                    return {
+                        cart: state.cart.map((p) => p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p)
+                    };
+                }
+
+                return {
+                    cart: [...state.cart, { ...product, quantity: 1 }]
+                }
+            }),
+
+            // remove
+            removeFromCart: (productId) => set((state) => ({
+                cart: state.cart.filter((p) => p.id !== productId)
+            })),
+
+            // update
+            updateQuantity: (productId, newQuantity) =>
+                set((state) => {
+                    const validQuantity = newQuantity > 0 ? newQuantity : 1;
+                    return {
+                        cart: state.cart.map((p) =>
+                            p.id === productId
+                                ? { ...p, quantity: validQuantity }
+                                : p
+                        )
+                    }
+                }),
+
+            // Clear cart: called after successful checkout/payment process
+            clearCart: () => set({ cart: [] }),
+
         }),
+
         {
-            name: 'commerce-store', // الاسم الذي سيتم حفظ السلة به في localStorage
-            // TODO: حدد الحقول التي تريد حفظها فقط في localStorage (مثلاً السلة والثيم فقط، وتجاهل حالة فتح السلة).
-            partialize: (state) => ({ 
-                // ارجع الكائنات التي تريد حفظها هنا
+            name: 'commerce-store', // Unique key for the localStorage item
+            // Specify which fields to persist in localStorage
+            partialize: (state) => ({
+                cart: state.cart,
+                theme: state.theme,
             }),
         }
     )
