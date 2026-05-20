@@ -1,49 +1,63 @@
+import { useCommerceStore } from "@/Stores/useCommerceStore";
+import { router } from "@inertiajs/react";
 import React from "react";
-import { Link } from "@inertiajs/react";
 
 export default function CartDrawer() {
-    // =========================================================================
-    // TODO: استورد مخزن Zustand وجلب الدوال والحالات التالية:
-    // 1. cart (العناصر الحالية في السلة)
-    // 2. isCartOpen (حالة ظهور السلة)
-    // 3. toggleCart (دالة فتح/إغلاق السلة)
-    // 4. removeFromCart (دالة الحذف)
-    // 5. updateQuantity (دالة تحديث الكمية)
-    //
-    // مثال: const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity } = useCommerceStore();
-    // =========================================================================
-    // راجع CheckoutController الذي يستقبل البيانات من هذا المكون
-    // قيم مؤقتة (Mock Data) لمنع أخطاء التشغيل؛ استبدلها بالقيم القادمة من Zustand لاحقاً:
-    const isCartOpen = false;
-    const cart = [];
-    const toggleCart = () => {};
-    const removeFromCart = (id) => {};
-    const updateQuantity = (id, q) => {};
 
+
+    // راجع CheckoutController الذي يستقبل البيانات من هذا المكون
+
+    // import current state from Zustand
+    const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity } = useCommerceStore();
+
+
+
+    // Subtotal
+    const subtotal = Number(cart.reduce((acc, item) => acc + (item.price_amount * item.quantity), 0).toFixed(2));
+
+
+    // send the data to checkout page
+    const handleCheckout = (e) => {
+        e.preventDefault();
+
+        const orderItems = cart.map(item => ({
+            id: item.id,
+            quantity: item.quantity,
+        }));
+
+        router.post('/checkout', { items: orderItems }, {
+            onSuccess: () => {
+                toggleCart();
+            },
+            onError: (errors) => {
+                //Todo: turn it to notification system
+                console.log("فشل الانتقال للدفع:", errors);
+            }
+        })
+    }
+
+    // cart already open 
     if (!isCartOpen) return null;
 
-    // TODO: احسب المجموع الفرعي المؤقت (Subtotal) لجميع المنتجات في السلة.
-    // تلميح: استخدم cart.reduce() لحساب مجموع ضرب السعر بالكمية لكل عنصر.
-    const subtotal = 0;
-
+    // open cart 
     return (
         <div className="fixed inset-0 z-50 overflow-hidden">
-            {/* الخلفية المظلمة الشفافة (Backdrop) */}
+            {/* (Backdrop) */}
             <div
                 className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity"
-                onClick={toggleCart} // TODO: تأكد من ربط الضغط على الخلفية لإغلاق السلة
+                onClick={toggleCart} //  close the cart when click on backdrop 
             />
 
             <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
-                {/* لوحة السلة المنزلقة بتصميم زجاجي فاخر */}
+                {/* cart */}
                 <div className="w-screen max-w-md transform border-l border-white/10 bg-white/80 p-6 shadow-2xl backdrop-blur-xl transition dark:bg-slate-900/80">
                     <div className="flex h-full flex-col">
-                        {/* الهيدر (Header) */}
+                        {/* (Header) */}
                         <div className="flex items-center justify-between border-b border-slate-200 pb-5 dark:border-white/10">
                             <h2 className="text-lg font-black text-slate-950 dark:text-white flex items-center gap-2">
                                 🛒 Shopping Cart
                                 <span className="rounded-full bg-cyan-500/20 px-2.5 py-0.5 text-xs font-black text-cyan-600 dark:text-cyan-400">
-                                    {/* TODO: اعرض عدد العناصر الفريدة في السلة هنا */}
+                                    {/* Number of unique items in the cart*/}
                                     {cart.length}
                                 </span>
                             </h2>
@@ -56,7 +70,7 @@ export default function CartDrawer() {
                             </button>
                         </div>
 
-                        {/* قائمة العناصر (Items List) */}
+                        {/* (Items List) */}
                         <div className="flex-1 overflow-y-auto py-5">
                             {cart.length === 0 ? (
                                 <div className="flex h-full flex-col items-center justify-center text-center">
@@ -107,7 +121,7 @@ export default function CartDrawer() {
                                                             updateQuantity(
                                                                 item.id,
                                                                 item.quantity -
-                                                                    1,
+                                                                1,
                                                             )
                                                         }
                                                     >
@@ -116,6 +130,13 @@ export default function CartDrawer() {
                                                     <span className="text-xs font-bold w-4 text-center">
                                                         {item.quantity}
                                                     </span>
+                                                    {/* حقل إدخال ذكي يتيح الكتابة المباشرة */}
+                                                    {/* <input
+                                                        type="number"
+                                                        value={item.quantity}
+                                                        className="w-10 text-center text-xs font-bold bg-transparent border-none focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                        onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
+                                                    /> */}
                                                     {/* زر زيادة الكمية */}
                                                     <button
                                                         type="button"
@@ -124,7 +145,7 @@ export default function CartDrawer() {
                                                             updateQuantity(
                                                                 item.id,
                                                                 item.quantity +
-                                                                    1,
+                                                                1,
                                                             )
                                                         }
                                                     >
@@ -149,7 +170,7 @@ export default function CartDrawer() {
                             )}
                         </div>
 
-                        {/* الفوتر والعمليات (Footer & Checkout button) */}
+                        {/* (Footer & Checkout button) */}
                         {cart.length > 0 && (
                             <div className="border-t border-slate-200 pt-5 dark:border-white/10 space-y-4">
                                 <div className="flex justify-between text-base font-black text-slate-950 dark:text-white">
@@ -162,14 +183,14 @@ export default function CartDrawer() {
                                 </p>
 
                                 {/* زر الانتقال للدفع */}
-                                {/* TODO: عند تفعيل السلة الحقيقية، قم بتحويل زر Link إلى زر اعتيادي أو دالة تقوم بإرسال عناصر السلة (الكميات والمعرفات فقط) كبيانات للـ Backend */}
-                                <Link
-                                    href="/checkout"
-                                    className="fintech-button w-full text-center block py-3 rounded-xl"
-                                    onClick={toggleCart} // إغلاق السلة عند الذهاب للدفع
+
+                                <button
+                                    type="button"
+                                    className="fintech-button w-full text-center cursor-pointer py-3 rounded-xl"
+                                    onClick={handleCheckout}
                                 >
                                     Proceed to Checkout
-                                </Link>
+                                </button>
                             </div>
                         )}
                     </div>
