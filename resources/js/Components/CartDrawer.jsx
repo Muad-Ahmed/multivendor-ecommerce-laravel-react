@@ -92,9 +92,9 @@ export default function CartDrawer() {
                                             className="flex items-center gap-4 rounded-xl border border-slate-200/60 bg-white/50 p-3 dark:border-white/5 dark:bg-white/5"
                                         >
                                             {/* صورة صغيرة ملونة معبرة عن المنتج */}
-                                            <div
+                                            {/* <div
                                                 className={`h-16 w-16 flex-shrink-0 rounded-lg bg-gradient-to-br ${item.accent || "from-cyan-400 to-lime-300"}`}
-                                            />
+                                            /> */}
 
                                             {/* تفاصيل المنتج */}
                                             <div className="flex-1 min-w-0">
