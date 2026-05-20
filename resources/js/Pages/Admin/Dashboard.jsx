@@ -2,7 +2,12 @@ import { Head } from '@inertiajs/react';
 import CommerceShell from '@/Layouts/CommerceShell';
 import MetricCard from '@/Components/Commerce/MetricCard';
 
-export default function Dashboard() {
+export default function Dashboard({ vendors, products, orders, payments }) {
+
+    const formatNumber = (num) => {
+        return num >= 1000 ? (num / 1000).toFixed(1) + 'k' : num;
+    };
+
     return (
         <CommerceShell
             eyebrow="Admin control room"
@@ -12,10 +17,10 @@ export default function Dashboard() {
             <Head title="Admin Dashboard" />
 
             <section className="grid gap-5 md:grid-cols-4">
-                <MetricCard label="Vendors" value="24" tone="cyan" helper="TODO: راقب حالة الموافقة." />
-                <MetricCard label="Products" value="912" tone="violet" helper="TODO: أضف مراجعة المنتجات لاحقا." />
-                <MetricCard label="Orders" value="1.8k" tone="lime" helper="TODO: اعرض مؤشرات عامة فقط." />
-                <MetricCard label="Payments" value="Stripe" tone="rose" helper="TODO: اربط حالات الدفع من Payment model." />
+                <MetricCard label={vendors} value="24" tone="cyan" helper="TODO: راقب حالة الموافقة." />
+                <MetricCard label={formatNumber(products)} value="912" tone="violet" helper="TODO: أضف مراجعة المنتجات لاحقا." />
+                <MetricCard label="Orders" value={formatNumber(orders)} tone="lime" helper="TODO: اعرض مؤشرات عامة فقط." />
+                <MetricCard label="Payments" value={formatNumber(payments)} tone="rose" helper="TODO: اربط حالات الدفع من Payment model." />
             </section>
 
             <section className="mt-5 grid gap-5 lg:grid-cols-2">

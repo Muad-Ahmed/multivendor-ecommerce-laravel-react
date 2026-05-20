@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\VendorProfile;
 use Illuminate\Support\Facades\Cache;
@@ -21,6 +22,7 @@ class AdminDashboardController extends Controller
 
         $vendorsCount = VendorProfile::count();
         $ordersCount = Order::count();
+        $paymentsCount = Payment::count();
 
         $productsCount = Cache::remember('admin_dashboard_statu', 600, function () {
             return Product::count();
@@ -30,6 +32,7 @@ class AdminDashboardController extends Controller
             'vendors' => $vendorsCount,
             'products' => $productsCount,
             'orders' => $ordersCount,
+            'payments' => $paymentsCount
         ]);
     }
 }
