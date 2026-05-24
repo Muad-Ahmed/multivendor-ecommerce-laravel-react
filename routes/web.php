@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/market', [ProductCatalogController::class, 'index'])->name('market.index');
-Route::get('/checkout', [CheckoutController::class, 'show'])->middleware(['auth', 'verified'])->name('checkout.show');
+Route::post('/checkout', [CheckoutController::class, 'show'])->middleware(['auth', 'verified'])->name('checkout.show');
 Route::get('/vendor/dashboard', [VendorDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('vendor.dashboard');
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('admin.dashboard');
 
@@ -33,4 +33,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

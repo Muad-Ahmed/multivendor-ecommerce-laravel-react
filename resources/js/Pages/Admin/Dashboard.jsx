@@ -17,8 +17,8 @@ export default function Dashboard({ vendors, products, orders, payments }) {
             <Head title="Admin Dashboard" />
 
             <section className="grid gap-5 md:grid-cols-4">
-                <MetricCard label={vendors} value="24" tone="cyan" helper="TODO: راقب حالة الموافقة." />
-                <MetricCard label={formatNumber(products)} value="912" tone="violet" helper="TODO: أضف مراجعة المنتجات لاحقا." />
+                <MetricCard label="Vendors" value={formatNumber(vendors)} tone="cyan" helper="TODO: راقب حالة الموافقة." />
+                <MetricCard label="Products" value={formatNumber(products)} tone="violet" helper="TODO: أضف مراجعة المنتجات لاحقا." />
                 <MetricCard label="Orders" value={formatNumber(orders)} tone="lime" helper="TODO: اعرض مؤشرات عامة فقط." />
                 <MetricCard label="Payments" value={formatNumber(payments)} tone="rose" helper="TODO: اربط حالات الدفع من Payment model." />
             </section>

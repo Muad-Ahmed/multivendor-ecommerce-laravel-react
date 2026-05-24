@@ -13,11 +13,9 @@ const navigation = [
 
 export default function CommerceShell({ children, eyebrow = 'Multi-vendor commerce', title, subtitle }) {
 
-    const { cart, toggleCart, theme, toggleTheme } = useCommerceStore();
+    const { cart, toggleCart, toggleTheme } = useCommerceStore();
 
-    useEffect(() => {
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-    }, [theme]);
+
 
     // sum of products quantities
     const totalItems = cart.reduce((total, item) => total + (item.quantity || 0), 0);
