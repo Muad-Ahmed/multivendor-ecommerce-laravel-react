@@ -3,7 +3,7 @@ import CommerceShell from '@/Layouts/CommerceShell';
 import { useCommerceStore } from '@/Stores/useCommerceStore';
 
 
-export default function Catalog() {
+export default function Catalog({ products }) {
 
     const { addToCart, toggleCart } = useCommerceStore();
 
@@ -33,7 +33,7 @@ export default function Catalog() {
 
                 {/* the products: */}
                 <div className="grid gap-5 md:grid-cols-3">
-                    {products.map((product) => (
+                    {products.data.map((product) => (
                         <article key={product.name} className="fintech-panel overflow-hidden rounded-xl">
                             {/* <div className={`h-44 bg-gradient-to-br ${product.accent}`} /> */}
                             <div className="p-5">
